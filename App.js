@@ -13,12 +13,11 @@ import {
   FlatList
 } from 'react-native';
 import NewsRow from './NewsRow';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-
-
-
-const App = () => {
-  const [seconds, setSeconds] = useState(0);
+const Main=()=>{
+  
   const [Page, setPage] = useState(0)
   const [News, setNews] = useState([])
   let interval = null;
@@ -44,6 +43,11 @@ const App = () => {
         renderItem={({ item }) => (
           <NewsRow data={item}></NewsRow>
         )}
+        onEndReachedThreshold={0.3}
+        onEndReached={({ distanceFromEnd }) => {
+          console.log('on end reached ', distanceFromEnd);
+          getData()
+        }}
       /> 
    
       
@@ -66,6 +70,24 @@ const App = () => {
       })
       .catch(error => console.log(error))
   }
+}
+
+
+const App = () => {
+ return(
+  <NavigationContainer>
+     <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Main}
+          options={{ title: 'Welcome' }}
+        />
+        <Stack.Screen name="Profile" component={NewsRow} />
+      </Stack.Navigator>
+  
+</NavigationContainer>
+   
+ )
 };
 
 
